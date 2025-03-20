@@ -25,6 +25,7 @@
     </div>
   </nav>
 
+
   <!-- Home Section -->
   <section id="home">
     <h1>ARPIT RAJ KATIYAR</h1>
@@ -51,6 +52,24 @@
   <section id="projects">
     <h2>Projects</h2>
     <div class="project-grid">
+
+      <!-- Project 3:  -->
+      <div class="project-card">
+        <div class="project-image">
+          <img src="" alt="">
+          <div class="project-overlay">
+            <a href="" target="_blank" class="project-link">View on GitHub</a>
+            <a href="" target="_blank" class="project-link">Watch Demo</a>
+            <a href="" target="_blank" class="project-link">Run Website</a>
+          </div>
+        </div>
+        <h3>In Progress</h3>
+        <p>
+          Available the project soon.
+        </p>
+      </div>
+
+
       <!-- Project 1: ARK Tech -->
       <div class="project-card">
         <div class="project-image">
@@ -178,7 +197,7 @@
         <input type="email" name="email" placeholder="Your Email  *" required>
         <input type="tel" name="Whatsapp" placeholder="Your Whatsapp Number (Optional)" >
         <textarea name="message" placeholder="Your Message  *" rows="5" required></textarea>
-        <button type="submit">Send Message</button>
+        <button type="submit"><b>Send Message</b></button>
       </form>
 
       <!-- Contact Details -->
@@ -215,37 +234,6 @@
       <p>©  2025     Arpit Raj Katiyar. All rights reserved.</p>
     </div>
   </footer>
-
-  <!-- JavaScript for Animations -->
-  <script>
-    // Function to animate progress bars
-    function animateProgressBars() {
-      const skillBars = document.querySelectorAll('.skill-level');
-      skillBars.forEach(bar => {
-        const width = bar.style.width; // Get the width from the inline style
-        bar.style.width = '0'; // Reset width for animation
-        setTimeout(() => {
-          bar.style.width = width; // Animate to the specified width
-        }, 100);
-      });
-    }
-
-    // Function to check if the Skills Section is in view
-    function isSkillsSectionInView() {
-      const skillsSection = document.getElementById('skills');
-      const rect = skillsSection.getBoundingClientRect();
-      return (
-        rect.top >= 0 &&
-        rect.bottom <= (window.innerHeight || document.documentElement.clientHeight)
-      );
-    }
-
-    // Animate progress bars when the Skills Section is in view
-    window.addEventListener('scroll', () => {
-      if (isSkillsSectionInView()) {
-        animateProgressBars();
-      }
-    });
-  </script>
+  <script src="script.js"></script>
 </body>
 </html>
