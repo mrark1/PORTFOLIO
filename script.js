@@ -27,3 +27,40 @@
       }
     });
  
+
+
+    // Firebase configuration (Replace with your Firebase project config)
+// For Firebase JS SDK v7.20.0 and later, measurementId is optional
+const firebaseConfig = {
+  apiKey: "AIzaSyCEd_V4klxXgPlWcgPz7hS812cgDJFFelQ",
+  authDomain: "portfolio-website-747c1.firebaseapp.com",
+  projectId: "portfolio-website-747c1",
+  storageBucket: "portfolio-website-747c1.firebasestorage.app",
+  messagingSenderId: "463264477627",
+  appId: "1:463264477627:web:471648e445561e6353d49e",
+  measurementId: "G-2FW1QM6L85"
+};
+
+// Initialize Firebase
+firebase.initializeApp(firebaseConfig);
+const db = firebase.firestore();
+
+// Reference the visitors document
+const visitorRef = db.collection("visitors").doc("counter");
+
+// Update visitor count
+visitorRef.get().then((doc) => {
+    if (doc.exists) {
+        let count = doc.data().count + 1;
+        visitorRef.set({ count }); // Update count in Firestore
+        document.getElementById("visitorCount").innerText = count;
+    } else {
+        visitorRef.set({ count: 1 }); // Initialize if not exists
+        document.getElementById("visitorCount").innerText = 1;
+    }
+});
+
+
+
+
+
