@@ -1,0 +1,264 @@
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Certificate</title>
+    <link rel="stylesheet" href="styles.css">
+    <script src="script.js"></script>
+    <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Arpit Raj Katiyar - Portfolio</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <link rel="stylesheet" href="styles.css">
+  <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js"></script>
+<script src="script.js"></script> <!-- Your JS file -->
+  <link rel="stylesheet" href="extra/stylecer.css">
+</head>
+<body>
+    <!-- Navbar -->
+  <nav id="navbar">
+    <div class="nav-container">
+      <div class="logo">
+        <a href="#home" style="color:gainsboro;">ARPIT RAJ KATIYAR</a>
+      </div>
+      <ul class="nav-links">
+        <li><a href="index.html"><b>Home</b></a></li>
+       <li><a href="ARPIT-RAJ-KATIYAR-FlowCV-Resume-20250324.pdf" download class="resume-btn"><b>Resume</b></a></li>
+      </ul>
+    </div>
+  </nav>
+
+
+
+
+  <header><br>
+        <h1>My Certificates</h1>
+        <p><b>A collection of my achievements and qualifications</b></p>
+    </header>
+    
+    <div class="controls">
+        <div class="sort-options">
+            <select id="sort-by">
+                <option value="date-asc">Sort by Date (Oldest First)</option>
+                <option value="date-desc" selected>Sort by Date (Newest First)</option>
+                <option value="name-asc">Sort by Name (A-Z)</option>
+                <option value="name-desc">Sort by Name (Z-A)</option>
+            </select>
+        </div>
+    </div>
+    
+    <div class="certificate-grid" id="certificate-container">
+        <!-- Certificates will be dynamically inserted here -->
+    </div>
+    
+    <div class="modal" id="certificate-modal">
+        <div class="modal-content">
+            <button class="modal-close" id="modal-close">&times;</button>
+            <img class="modal-img" id="modal-img" src="" alt="Certificate">
+            <div class="modal-details">
+                <h2 id="modal-title"></h2>
+                <p><strong>Issuing Organization:</strong> <span id="modal-org"></span></p>
+                <p><strong>Issue Date:</strong> <span id="modal-date"></span></p>
+                <p><strong>Description:</strong> <span id="modal-desc"></span></p>
+                <div class="modal-actions">
+                    <button id="download-btn">Download Certificate</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        // Certificate data - replace with your actual certificates
+        const certificates = [
+            {
+                id: 1,
+                title: "FOSS HACK 2025 Hackathon",
+                organization: "FOSS Hack United - Kanpur",
+                issueDate: "2025-02-23",
+                description: "I had an incredible time at FOSS Hack 2025, held at Chhatrapati Shahu Ji Maharaj University (CSJMU), Kanpur on February 22-23—two days of learning, collaboration, and innovation! Huge thanks to FOSS United Kanpur, FOSS United, CSJM Innovation Foundation, and Chhatrapati Shahu Ji Maharaj University (CSJMU), Kanpur for organizing this amazing event. <br>A special shoutout to Eshan Singh, Jyoti Nigam, Akarsh Bajpai, and Samarth Mishra for creating such a supportive and engaging environment. Your efforts made this event truly remarkable!                          I’m immensely proud of my team, ANARAGHYA, and our project, 'Pran Kavach.' It was a challenging yet fulfilling journey, and I couldn’t have asked for better teammates—TUSHAR SRIVASTAVA, Mayank Kumar Kashyap, SATVIK YADAV Your dedication and problem-solving skills made all the difference! ",
+                imageUrl: "certificates/Foss Hack 2025.jpg",
+                downloadUrl: "certificates/Foss Hack 2025.jpg"
+            },
+            {
+                id: 2,
+                title: "Data Science Fundamentals",
+                organization: "Data Science Institute",
+                issueDate: "2023-02-10",
+                description: "Fundamentals of data analysis, machine learning, and data visualization using Python.",
+                imageUrl: "https://via.placeholder.com/800x600?text=Data+Science+Fundamentals",
+                downloadUrl: "#"
+            },
+            {
+                id: 3,
+                title: "Project Management Professional",
+                organization: "PMI",
+                issueDate: "2023-08-22",
+                description: "Certified Project Management Professional with expertise in Agile and Waterfall methodologies.",
+                imageUrl: "https://via.placeholder.com/800x600?text=Project+Management+Professional",
+                downloadUrl: "#"
+            },
+            {
+                id: 4,
+                title: "Advanced JavaScript Concepts",
+                organization: "Frontend Masters",
+                issueDate: "2022-11-05",
+                description: "Mastered advanced JavaScript concepts including closures, prototypes, and async programming.",
+                imageUrl: "https://via.placeholder.com/800x600?text=Advanced+JavaScript",
+                downloadUrl: "#"
+            },
+            {
+                id: 5,
+                title: "UX Design Certification",
+                organization: "Interaction Design Foundation",
+                issueDate: "2023-01-18",
+                description: "User experience design principles, wireframing, prototyping, and usability testing.",
+                imageUrl: "https://via.placeholder.com/800x600?text=UX+Design+Certification",
+                downloadUrl: "#"
+            },
+            {
+                id: 6,
+                title: "Cloud Architecture",
+                organization: "AWS",
+                issueDate: "2023-07-30",
+                description: "AWS Certified Solutions Architect with expertise in cloud infrastructure design.",
+                imageUrl: "https://via.placeholder.com/800x600?text=Cloud+Architecture",
+                downloadUrl: "#"
+            }
+        ];
+        
+        // DOM elements
+        const certificateContainer = document.getElementById('certificate-container');
+        const sortSelect = document.getElementById('sort-by');
+        const modal = document.getElementById('certificate-modal');
+        const modalImg = document.getElementById('modal-img');
+        const modalTitle = document.getElementById('modal-title');
+        const modalOrg = document.getElementById('modal-org');
+        const modalDate = document.getElementById('modal-date');
+        const modalDesc = document.getElementById('modal-desc');
+        const modalClose = document.getElementById('modal-close');
+        const downloadBtn = document.getElementById('download-btn');
+        
+        // Current certificate being viewed in modal
+        let currentCertificate = null;
+        
+        // Display certificates
+        function displayCertificates(certs) {
+            certificateContainer.innerHTML = '';
+            
+            certs.forEach(cert => {
+                const card = document.createElement('div');
+                card.className = 'certificate-card';
+                card.innerHTML = `
+                    <img src="${cert.imageUrl}" alt="${cert.title}" class="certificate-img">
+                    <div class="certificate-info">
+                        <h3>${cert.title}</h3>
+                        <p><strong>${cert.organization}</strong></p>
+                        <p>Issued: ${formatDate(cert.issueDate)}</p>
+                    </div>
+                `;
+                
+                card.addEventListener('click', () => openModal(cert));
+                certificateContainer.appendChild(card);
+            });
+        }
+        
+        // Format date for display
+        function formatDate(dateString) {
+            const options = { year: 'numeric', month: 'long', day: 'numeric' };
+            return new Date(dateString).toLocaleDateString(undefined, options);
+        }
+        
+        // Open modal with certificate details
+        function openModal(cert) {
+            currentCertificate = cert;
+            modalImg.src = cert.imageUrl;
+            modalImg.alt = cert.title;
+            modalTitle.textContent = cert.title;
+            modalOrg.textContent = cert.organization;
+            modalDate.textContent = formatDate(cert.issueDate);
+            modalDesc.textContent = cert.description;
+            downloadBtn.onclick = () => window.open(cert.downloadUrl, '_blank');
+            modal.style.display = 'flex';
+        }
+        
+        // Close modal
+        function closeModal() {
+            modal.style.display = 'none';
+            currentCertificate = null;
+        }
+        
+        // Sort certificates based on selected option
+        function sortCertificates() {
+            const sortValue = sortSelect.value;
+            let sortedCerts = [...certificates];
+            
+            switch(sortValue) {
+                case 'date-asc':
+                    sortedCerts.sort((a, b) => new Date(a.issueDate) - new Date(b.issueDate));
+                    break;
+                case 'date-desc':
+                    sortedCerts.sort((a, b) => new Date(b.issueDate) - new Date(a.issueDate));
+                    break;
+                case 'name-asc':
+                    sortedCerts.sort((a, b) => a.title.localeCompare(b.title));
+                    break;
+                case 'name-desc':
+                    sortedCerts.sort((a, b) => b.title.localeCompare(a.title));
+                    break;
+            }
+            
+            displayCertificates(sortedCerts);
+        }
+        
+        // Event listeners
+        sortSelect.addEventListener('change', sortCertificates);
+        modalClose.addEventListener('click', closeModal);
+        modal.addEventListener('click', (e) => {
+            if (e.target === modal) closeModal();
+        });
+        
+        // Initialize
+        sortCertificates();
+    </script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ 
+
+    <!-- Footer -->
+  <footer>
+    <div class="footer-content">
+      <div class="footer-image">
+        <img src="arpit.jpg" alt="Arpit Raj Katiyar">
+      </div>
+      <div class="social-links">
+        <a href="https://linkedin.com/in/ark0001" target="_blank"><i class="fab fa-linkedin"></i></a>
+        <a href="https://wa.me/919554300309?text=Hello Arpit ,Here me from your Portfolio Website" target="_blank"><i class="fab fa-whatsapp"></i></a>
+        <a href="mailto:240410@kit.ac.in" target="_blank"><i class="fas fa-envelope"></i></a>
+        <a href="https://github.com/mrark1" target="_blank"><i class="fab fa-github"></i></a>
+        <a href="https://x.com/mrark0001" target="_blank"><i class="fab fa-twitter"></i></a>
+        <a href="https://www.instagram.com/mr.ark_1/" target="_blank"><i class="fab fa-instagram"></i></a>
+        <a href="https://leetcode.com/u/mrark1/" target="_blank"><i class="fas fa-code"></i></a>
+        <a href="https://www.hackerrank.com/profile/h240410" target="_blank"><i class="fab fa-hackerrank"></i></a>
+      </div>
+      <p>©  2024     Arpit Raj Katiyar. All rights reserved.</p>
+    </div>
+  </footer>
+</body>
+</html>
